@@ -1,0 +1,114 @@
+const qrcode = require('qrcode-terminal'); //LLamamos los archivos
+const { Client, MessageMedia } = require('whatsapp-web.js');
+const {sendEmoji} = require('./emojiRamdom/emoji.js');
+const { getChar, deadChars } = require('./rickAndMorti/getCharacter.js');
+
+const app = new Client(); //Creamos una instancia(creamos nuestro bot)
+
+app.on('ready', () => {
+    console.log('Client is ready!');
+});
+
+app.on('qr', (qr) => {
+    qrcode.generate(qr, { small: true });
+});
+/*let welcome = true
+let states = {
+    menu: false,
+    lista: []
+}*/
+/*app.on('ready', () => {
+    console.log('Bot connected!'); // esto nos avisará por consola
+	// Podemos agregar adicional, ej: que nos mande un msj a nuestro propio numero
+		client.sendMessage('549numero@c.us', 'Hola Mundo!')
+});*/
+app.on("message", async msj =>{  //async para que la funcion sea asincrona
+//nuestro codigo dentro del grupo
+
+    if(msj.from == "120363318106547962@g.us"){
+        
+        if(msj.includes("/personaje/")){
+        const {name, status, image} = await getChar(msj)
+
+        const img = await MessageMedia.fromUrl(image)
+        await app.sendMessage(from,img, {caption:`Personaje: ${name} - *${status}*`})
+        }
+
+            //dead/
+        if(msj.includes("dead/")){
+            const {oj_uno,pj_dos} = await deadChars(msj)
+            
+
+        }
+
+
+
+
+
+
+
+        /*//Inicio
+        if(welcome){
+            console.log(msj.body)
+            await msj.reply("Hola buen dia, estamos atendiendo. Para enviar menu, envia !menu para pedir online")
+            welcome = false
+            return
+        }
+        //menu
+        if(msj.body.toLowerCase() == "!menu" && welcome == false){
+            states.menu = true
+            const image = await MessageMedia.fromFilePath("./menu/menuRestaurante.png")
+            await app.sendMessage(msj.from,image, {caption: "Selecciona segun lo que quieras, envia de a uno:\n1.Arroz con pollo - $100\n2.Chicharon de pollo - $200"})
+            return
+        }
+    if(states.menu){
+    switch(msj.body){
+        case "1":
+            await app.sendMessage(msj.from, "Genial agregamos a tu lista Arroz con pollo.🍚🍗")
+            states.lista.push({nombre: "arroz con pollo", precio: 100})
+            break;
+        case "2":
+            await app.sendMessage(msj.from, "Genial agregamos a tu lista Chicharon de pollo.🍗")
+            states.lista.push({nombre: "chicharon de pollo", precio: 200})
+            break;
+        case "!total":
+            if(states.lista.length == 0) return app.sendMessage(msj.from,"No has pedido nada.")
+            
+                await app.sendMessage(msj.from, `${states.lista.map(comida => comida.nombre + " "+ comida.precio+"\n")}`)
+                
+                let total = 0;
+                for(let i =0; i < states.lista.length; i++){
+                    total += states.lista[i].precio
+
+                }
+                await app.sendMessage(msj.from, `Tu total es: ${total}`)
+            
+            break;
+        default:
+            await app.sendMessage(msj.from, "Porfa, eleji bien de las dos opciones.")
+    }
+}*/
+    };
+//---------------------------
+
+
+
+
+    /*
+    if(msj.from == "120363318106547962@g.us"){
+        await app.sendMessage(msj.from es a donde queremos responder , "Si estoy en el grupo")
+        if(msj.body.toLowerCase() == "hola"){
+            await msjreply("Onda pone")
+            return
+        }*/
+    }
+    /*await msj.reply("Hola")  //await para que espere
+    console.log(msj.body)
+    console.log(msj.from)*/
+
+   /* if(msj.from == "numero de alguien@c.us"){
+        await msj.reply("Hola"+ (msj._data.notifyName).split(" ")[0] +sendEmoji())
+    }*/
+
+);
+app.initialize();
